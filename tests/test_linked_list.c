@@ -10,7 +10,7 @@ Test(linked_list, initialization) {
     cr_assert_null(list.head, "LinkedList head should be NULL after initialization");
 }
 
-// Test case for inserting at the beginning
+// Test case for inserting at the beginning for int type
 Test(linked_list, insertAtBeg) {
     LinkedList list;
     initList(&list);
@@ -18,6 +18,17 @@ Test(linked_list, insertAtBeg) {
     insertAtBeg(&list, &data, sizeof(data));
     cr_assert_not_null(list.head, "Head should not be NULL after insertion");
     cr_assert_eq(*(int*)list.head->data, data, "Data at the head is not correct after insertion");
+    freeList(&list);
+}
+
+// Test case for inserting at the beginning for char type
+Test(linked_list, insertAtBeg1){
+    LinkedList list;
+    initList(&list);
+    char data = 'v';
+    insertAtBeg(&list, &data, sizeof(data));
+    cr_assert_not_null(list.head, "Head should not be NULL after insertion");
+    cr_assert_eq(*(char*)list.head->data, data, "Data at the head is not correct after insertion");
     freeList(&list);
 }
 

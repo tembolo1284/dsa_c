@@ -43,6 +43,7 @@ void printList(LinkedList* list, void (*printData)(void*)) {
     Node* current = list->head;
     while (current != NULL) {
         printData(current->data);
+        printf(" -> ");
         current = current->next;
     }
     printf("\n");
