@@ -1,3 +1,5 @@
+# -*- MakeFile -*-
+
 BINARY=main
 
 TEST=tests
