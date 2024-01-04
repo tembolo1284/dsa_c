@@ -53,53 +53,36 @@ To compile and test the library:
 
 Ensure that Criterion is installed and properly set up in your environment for testing.
 
+
 def parse_xml_to_deal(xml_data: str):
     # Parse the XML data
     root = ET.fromstring(xml_data)
 
     # Iterate over each 'Deal' element in the XML
     for deal_element in root.findall('.//Deal'):
-        # Extract Deal data
-        deal_id = deal_element.find('./id').text
-        agreement_date = deal_element.find('./agreementDate').text
+        deal_data = {child.tag: child.text for child in deal_element if child.tag != 'Facilities'}
         facilities = []
 
         # Iterate over each 'Facility' within the Deal
         for facility_element in deal_element.findall('.//Facility'):
-            # Extract Facility data
-            facility_id = facility_element.find('./id').text
-            expiration_date = facility_element.find('./expirationDate').text
-            maturity_date = facility_element.find('./maturityDate').text
+            facility_data = {child.tag: child.text for child in facility_element if child.tag != 'ActiveOutstandings'}
             active_outstandings = []
 
             # Iterate over each 'ActiveOutstanding' within the Facility
             for ao_element in facility_element.findall('.//ActiveOutstanding'):
-                # Extract ActiveOutstanding data
-                ao_id = ao_element.find('./id').text
-                outstanding_type = ao_element.find('./outstandingType').text
-                # ... continue extracting other fields
-
+                ao_data = {child.tag: child.text for child in ao_element if child.tag != 'PortfolioShares'}
                 portfolio_shares = []
 
                 # Iterate over each 'PortfolioShare' within the ActiveOutstanding
                 for ps_element in ao_element.findall('.//PortfolioShare'):
-                    # Extract PortfolioShare data
-                    portfolio_code = ps_element.find('./portfolioCode').text
-                    amount = ps_element.find('./amount').text
-                    # ... continue extracting other fields
+                    ps_data = {child.tag: child.text for child in ps_element}
+                    portfolio_shares.append(PortfolioShare(**ps_data))
 
-                    # Create a PortfolioShare object
-                    portfolio_share = PortfolioShare(portfolio_code=portfolio_code, amount=amount)
-                    portfolio_shares.append(portfolio_share)
+                ao_data['portfolio_shares'] = portfolio_shares
+                active_outstandings.append(ActiveOutstanding(**ao_data))
 
-                # Create an ActiveOutstanding object
-                active_outstanding = ActiveOutstanding(id=ao_id, outstanding_type=outstanding_type, portfolio_shares=portfolio_shares)
-                active_outstandings.append(active_outstanding)
+            facility_data['active_outstandings'] = active_outstandings
+            facilities.append(Facility(**facility_data))
 
-            # Create a Facility object
-            facility = Facility(id=facility_id, expiration_date=expiration_date, maturity_date=maturity_date, active_outstandings=active_outstandings)
-            facilities.append(facility)
-
-        # Create a Deal object
-        deal = Deal(id=deal_id, agreement_date=agreement_date, facilities=facilities)
-        yield deal
+        deal_data['facilities'] = facilities
+        yield Deal(**deal_data)
