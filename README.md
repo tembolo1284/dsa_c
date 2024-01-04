@@ -53,3 +53,51 @@ To compile and test the library:
 
 Ensure that Criterion is installed and properly set up in your environment for testing.
 
+
+from typing import Generator
+import xml.etree.ElementTree as ET
+from collections import OrderedDict
+
+# Assume Facility and Deal are defined somewhere with the proper structure
+# to handle **facility_data and **deal_data respectively
+
+def get_deals_from_file(filename: str) -> Generator[Deal, None, None]:
+    # Parse the XML file
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    
+    # Iterate over each 'Deal' element in the XML
+    for deal_element in root.findall('.//Deal'):
+        deal_data = {}
+        
+        # Extract data for the deal
+        for child in deal_element:
+            if child.tag == 'Facilities':
+                facilities = []
+                for facility_element in child.findall('.//Facility'):
+                    facility_data = {}
+                    active_outstandings = []
+                    for facility_child in facility_element:
+                        if facility_child.tag == 'ActiveOutstandings':
+                            for ao in facility_child.findall('.//ActiveOutstanding'):
+                                active_outstanding_data = {}
+                                portfolio_shares = []
+                                for ao_child in ao:
+                                    if ao_child.tag == 'PortfolioShares':
+                                        for ps in ao_child.findall('.//PortfolioShare'):
+                                            portfolio_shares.append(OrderedDict(ps.attrib))
+                                    else:
+                                        active_outstanding_data[ao_child.tag] = ao_child.text
+                                active_outstandings.append(ActiveOutstanding(**active_outstanding_data, portfolio_shares=portfolio_shares))
+                        else:
+                            facility_data[facility_child.tag] = facility_child.text
+                    facilities.append(Facility(**facility_data, active_outstandings=active_outstandings))
+            else:
+                deal_data[child.tag] = child.text
+        yield Deal(**deal_data, facilities=facilities)
+
+# Use the generator
+for deal in get_deals_from_file('your_file.xml'):
+    print(deal)  # Or process the deal object as needed
+
+
