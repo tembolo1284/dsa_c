@@ -53,36 +53,3 @@ To compile and test the library:
 
 Ensure that Criterion is installed and properly set up in your environment for testing.
 
-
-def parse_xml_to_deal(xml_data: str):
-    # Parse the XML data
-    root = ET.fromstring(xml_data)
-
-    # Iterate over each 'Deal' element in the XML
-    for deal_element in root.findall('.//Deal'):
-        deal_data = {child.tag: child.text for child in deal_element if child.tag != 'Facilities'}
-        facilities = []
-
-        # Iterate over each 'Facility' within the Deal
-        for facility_element in deal_element.findall('.//Facility'):
-            facility_data = {child.tag: child.text for child in facility_element if child.tag != 'ActiveOutstandings'}
-            active_outstandings = []
-
-            # Iterate over each 'ActiveOutstanding' within the Facility
-            for ao_element in facility_element.findall('.//ActiveOutstanding'):
-                ao_data = {child.tag: child.text for child in ao_element if child.tag != 'PortfolioShares'}
-                portfolio_shares = []
-
-                # Iterate over each 'PortfolioShare' within the ActiveOutstanding
-                for ps_element in ao_element.findall('.//PortfolioShare'):
-                    ps_data = {child.tag: child.text for child in ps_element}
-                    portfolio_shares.append(PortfolioShare(**ps_data))
-
-                ao_data['portfolio_shares'] = portfolio_shares
-                active_outstandings.append(ActiveOutstanding(**ao_data))
-
-            facility_data['active_outstandings'] = active_outstandings
-            facilities.append(Facility(**facility_data))
-
-        deal_data['facilities'] = facilities
-        yield Deal(**deal_data)
