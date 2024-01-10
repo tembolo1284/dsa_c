@@ -2,54 +2,47 @@
 
 ## Overview
 
-This repository is part of an ongoing project to implement various data structures and algorithms in C. The `linked_list` is the first data structure implemented, with more to come soon.
+This repository contains a comprehensive library implementing various data structures and algorithms in C. It provides a generic way to handle different data types and includes a suite of operations for each data structure.
 
-## Linked List Library
+## Data Structures
 
-### `linked_list.c` and `linked_list.h`
+### Linked List (`linked_list.c`, `linked_list.h`)
+- **Key Functions:** Initialize, insert, delete, reverse, and free a linked list.
+- **Data Structures:** `Node`, `LinkedList`.
 
-The linked list implementation provides a generic way to create and manage a linked list, capable of storing data of any primitive data type.
+### Hashmap (`hashmap.c`, `hashmap.h`)
+- **Key Functions:** Initialize, insert, get, remove, and free a hashmap.
+- **Data Structures:** `KeyValue`, `Node`, `Hashmap`.
 
-#### Key Functions
+### Queue (`queue.c`, `queue.h`)
+- **Key Functions:** Initialize, enqueue, dequeue, and check if empty.
+- **Data Structures:** `Queue`.
 
-- `initLinkedList(LinkedList* list)`: Initializes a new linked list.
-- `insertAtBeg(LinkedList* list, void* data, size_t dataSize)`: Inserts a new node at the beginning of the list.
-- `insertAtEnd(LinkedList* list, void* data, size_t dataSize)`: Inserts a new node at the end of the list.
-- `deleteNode(LinkedList* list, void* data, size_t dataSize, int (*cmp)(void*, void*))`: Deletes a node from the list.
-- `reverseList(LinkedList* list)`: Reverses the order of the nodes in the list.
-- `freeLinkedList(LinkedList* list)`: Frees all nodes in the list.
+### Stack (Array-based) (`stack_array.c`, `stack_array.h`)
+- **Key Functions:** Initialize, push, pop, peek, and check if empty.
+- **Data Structures:** `Stack` (array-based implementation).
 
-#### Data Structures
+### Stack (Linked List-based) (`stack_ll.c`, `stack_ll.h`)
+- **Key Functions:** Initialize, push, pop, peek, and check if empty.
+- **Data Structures:** `Stack` (linked list-based implementation).
 
-- `Node`: Represents a node in the linked list.
-- `LinkedList`: Represents the linked list itself.
+### Node (`node.c`, `node.h`)
+- **Purpose:** Fundamental building block used in several of the above data structures.
 
-### `utils.c` and `utils.h`
+## Utility Library (`utils.c`, `utils.h`)
+Includes comparison and printing methods for different data types to support the data structures.
 
-Utility functions for the linked list, including comparison and printing methods for different data types.
-
-## Testing with `test_linked_list.c`
-
-Unit tests are provided using the Criterion testing framework. They validate the functionality of the linked list through various test cases:
-
-- **Initialization**: Tests if a new linked list is initialized correctly.
-- **Insertion at Beginning**: Verifies correct insertion at the beginning.
-- **Insertion at End**: Checks for correct insertion at the end of the list.
-- **Deletion**: Ensures proper deletion functionality.
-- **Reversal**: Validates the list reversal functionality.
-- **Free List**: Confirms that the list is freed without memory leaks.
+## Unit Testing (`test_linked_list.c`)
+- **Framework:** Criterion testing framework.
+- **Tests:** Initialization, insertion, deletion, reversal, and memory management.
 
 ## Future Developments
-
-- More data structures will be added to this library soon.
-- Implementation of various algorithms is also planned.
+- Continuous expansion with more data structures and algorithms.
+- Enhancements to existing implementations.
 
 ## Compilation and Testing
+- **Build:** Run `make` to compile the library and main application.
+- **Unit Tests:** Run `make test` for executing unit tests (requires Criterion).
 
-To compile and test the library:
-
-1. Run `make` to build the library and the main application.
-2. Run `make test` to compile and execute the unit tests.
-
-Ensure that Criterion is installed and properly set up in your environment for testing.
+---
 
