@@ -25,6 +25,20 @@ Test(hashmap, insert_get_int) {
     hashmapFree(map);
 }
 
+// Test for inserting and getting char values
+Test(hashmap, insert_get_char) {
+    Hashmap *map = hashmapInit(10, sizeof(char), sizeof(char), hashChar, compareChars, allocChar, allocChar, freeChar, freeChar);
+    char key = 'a';
+    char value = 'n';
+
+    cr_assert(hashmapInsert(map, &key, &value), "Insert failed");
+    char retrieved;
+    cr_assert(hashmapGet(map, &key, &retrieved), "Get failed");
+    cr_assert_eq(retrieved, value, "Retrieved value doesn't match inserted value");
+
+    hashmapFree(map);
+}
+
 // Test for removing elements
 Test(hashmap, remove) {
     Hashmap *map = hashmapInit(10, sizeof(int), sizeof(int), hashInt, compareInts, allocInt, allocInt, freeInt, freeInt);
